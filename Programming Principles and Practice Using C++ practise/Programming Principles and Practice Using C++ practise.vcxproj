@@ -117,9 +117,6 @@
   <ItemGroup>
     <ClInclude Include="std_lib_facilities.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="3.9 drill .cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
