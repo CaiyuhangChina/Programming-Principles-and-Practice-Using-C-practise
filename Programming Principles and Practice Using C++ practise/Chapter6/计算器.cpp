@@ -21,7 +21,7 @@ private:
 double expression();
 double term();
 double primary();
-
+void calculate();
 
 const char number = '8';//if a kind of value is '8',it is a number
 const char quit = 'q';
@@ -29,27 +29,16 @@ const char print = ';';
 const string prompt = ">";
 const string result = "=";
 
+
 Token_stream token_stream;
 vector<Token> tokens;
 
 int main()
-try {
-	double val = 0;
-	while (cin)
-	{
-		cout << prompt;
-		Token t = token_stream.get();
-		while (t.kind = print)t = token_stream.get();
-		if (t.kind == quit)
-		{
-			keep_window_open();
-			return 0;
-		}
-		token_stream.putback(t);
-		cout<<"="<<expression() << endl;
-	}
-		
+try 
+{
+	calculate();
 	keep_window_open();
+	return 0;
 }
 catch (exception& e) {
 	cerr << e.what() << '\n';
@@ -142,6 +131,23 @@ double primary()
 	default:
 		error("primary expected");
 		break;
+	}
+}
+
+void calculate()
+{
+	while (cin)
+	{
+		cout << prompt;
+		Token t = token_stream.get();
+		while (t.kind = print)t = token_stream.get();
+		if (t.kind == quit)
+		{
+			keep_window_open();
+			return ;
+		}
+		token_stream.putback(t);
+		cout << "=" << expression() << endl;
 	}
 }
 
