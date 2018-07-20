@@ -23,6 +23,11 @@ double term();
 double primary();
 
 
+const char number = '8';//if a kind of value is '8',it is a number
+const char quit = 'q';
+const char print = ';';
+const string prompt = ">";
+const string result = "=";
 
 Token_stream token_stream;
 vector<Token> tokens;
@@ -32,10 +37,10 @@ try {
 	double val = 0;
 	while (cin)
 	{
-		cout << ">";
+		cout << prompt;
 		Token t = token_stream.get();
-		while (t.kind = ';')t = token_stream.get();
-		if (t.kind == 'q')
+		while (t.kind = print)t = token_stream.get();
+		if (t.kind == quit)
 		{
 			keep_window_open();
 			return 0;
@@ -128,7 +133,7 @@ double primary()
 		if (token.kind != ')') error("')' expected!");
 		return d;
 	}
-	case '8':
+	case number:
 		return token.value;
 	case '+':
 		return primary();
@@ -162,7 +167,7 @@ Token Token_stream::get()
 		cin.putback(ch);
 		double d;
 		cin >> d;
-		return Token{ '8',d };
+		return Token{ number,d };
 	}
 	default:
 		error("Bad token");
