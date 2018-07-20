@@ -32,16 +32,11 @@ try {
 	double val = 0;
 	while (cin)
 	{
-		cout << ">";
 		Token t = token_stream.get();
-		while (t.kind = ';')t = token_stream.get();
-		if (t.kind == 'q')
-		{
-			keep_window_open();
-			return 0;
-		}
-		token_stream.putback(t);
-		cout<<"="<<expression() << endl;
+		if(t.kind=='q')break;
+		if (t.kind == ';')cout << "=" << val << endl;
+		else token_stream.putback(t);
+		val = expression();
 	}
 		
 	keep_window_open();
@@ -100,14 +95,6 @@ double term()
 			token = token_stream.get();
 			break;
 		}
-		case '%':
-		{
-			double d = primary();
-			if (d == 0) error("divided by zero");
-			left = fmod(left, d);
-			token = token_stream.get();
-			break;
-		}
 		default:
 			token_stream.putback(token);
 			return left;
@@ -130,10 +117,6 @@ double primary()
 	}
 	case '8':
 		return token.value;
-	case '+':
-		return primary();
-	case '-':
-		return -primary();
 	default:
 		error("primary expected");
 		break;
