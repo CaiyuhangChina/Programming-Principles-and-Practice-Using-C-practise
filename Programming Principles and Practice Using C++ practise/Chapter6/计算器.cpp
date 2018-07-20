@@ -12,6 +12,7 @@ class Token_stream
 public:
 	Token get();
 	void putback(Token token);
+	void ignore(char c);
 private:
 	bool full;
 	Token buffer;
@@ -22,6 +23,8 @@ double expression();
 double term();
 double primary();
 void calculate();
+void clean_up_mess();
+
 
 const char number = '8';//if a kind of value is '8',it is a number
 const char quit = 'q';
@@ -138,17 +141,29 @@ void calculate()
 {
 	while (cin)
 	{
-		cout << prompt;
-		Token t = token_stream.get();
-		while (t.kind = print)t = token_stream.get();
-		if (t.kind == quit)
-		{
-			keep_window_open();
-			return ;
+		try {
+			cout << prompt;
+			Token t = token_stream.get();
+			while (t.kind = print)t = token_stream.get();
+			if (t.kind == quit)
+			{
+				keep_window_open();
+				return;
+			}
+			token_stream.putback(t);
+			cout << "=" << expression() << endl;
 		}
-		token_stream.putback(t);
-		cout << "=" << expression() << endl;
+		catch (exception & e)
+		{
+			cerr << e.what() << endl;
+			clean_up_mess();
+		}
 	}
+}
+
+void clean_up_mess()
+{
+	token_stream.ignore(print);
 }
 
 
@@ -163,9 +178,14 @@ Token Token_stream::get()
 	cin >> ch;
 	switch (ch)
 	{
-	case 'q':
-	case ';':
-	case '+':case'-':case '*':case '/':case '(':case ')':
+	case quit:
+	case print:
+	case '+':
+	case'-':
+	case '*':
+	case '/':
+	case '(':
+	case ')':
 		return Token{ ch }; break;
 	case '.':
 	case '0':case'1':case '2':case '3':case'4':case'5':case'6':case'7':case'8':case '9':
@@ -185,4 +205,22 @@ void Token_stream::putback(Token token)
 	if (full)error("putback() into a full buffer");
 	full = true;
 	buffer = token;
+}
+
+void Token_stream::ignore(char c)
+{
+	if (full && c == buffer.kind)
+	{
+		full = false;
+		return;
+	}
+	full = false;
+	char ch;
+	while (cin >> ch)
+	{
+		if (ch == c)
+		{
+			return;
+		}
+	}
 }
