@@ -58,7 +58,6 @@ vector<Token> tokens;
 int main()
 try 
 {
-	define_name("k", 1000);
 	calculate();
 	keep_window_open();
 	return 0;
