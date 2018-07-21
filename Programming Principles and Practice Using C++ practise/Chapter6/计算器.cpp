@@ -33,7 +33,9 @@ double statement();
 double term();
 double primary();
 double declaration();
+double sqrt_fun();
 double get_value(string var);
+
 void calculate();
 void clean_up_mess();
 bool is_declared(string var);
@@ -46,9 +48,12 @@ const char quit = 'q';
 const char print = ';';
 const char let = 'l';
 const char name = 'n';
+const char sqrt_label = 's';
 const string prompt = ">";
 const string result = "=";
 const string declkey = "let";
+const string sqrtkey = "sqrt";
+const string powkey = "pow";
 
 vector<Variable> var_table;
 
@@ -163,6 +168,8 @@ double primary()
 		return token.value;
 	case name:
 		return get_value(token.name);
+	case sqrt_label:
+		return sqrt_fun();
 	case '+':
 		return primary();
 	case '-':
@@ -183,6 +190,17 @@ double declaration()
 	double d = expression();
 	define_name(var_name, d);
 	return d;
+}
+
+double sqrt_fun()
+{
+	Token left = token_stream.get();
+	if (left.kind != '(') error("( expected");
+	double d = expression();
+	Token right = token_stream.get();
+	if (right.kind != ')') error(") expected");
+	if (d < 0) error(to_string(d)+ " is a negative number");
+	return sqrt(d);
 }
 
 double get_value(string var)
@@ -296,6 +314,9 @@ Token Token_stream::get()
 			while (cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
 			cin.putback(ch);
 			if (s == declkey) return Token(let);
+			if (s == sqrtkey)	return Token(sqrt_label);
+			
+			//TODO 增加sqrt和power的key
 			return Token(name, s);
 		}
 		error("Bad token");
