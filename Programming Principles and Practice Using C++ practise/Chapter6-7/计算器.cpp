@@ -55,6 +55,7 @@ const string declkey = "let";
 const string sqrtkey = "sqrt";
 const string powkey = "pow";
 
+
 vector<Variable> var_table;
 
 Token_stream token_stream;
@@ -311,7 +312,7 @@ Token Token_stream::get()
 		{
 			string s{};
 			s += ch;
-			while (cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
+			while (cin.get(ch) && (isalpha(ch) || isdigit(ch)||ch=='_')) s += ch;//exercise6.1
 			cin.putback(ch);
 			if (s == declkey) return Token(let);
 			if (s == sqrtkey)	return Token(sqrt_label);
